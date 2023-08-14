@@ -44,3 +44,21 @@ The token can be generated using the following command.
 ``` sh
 kubectl -n kubernetes-dashboard create token admin-user
 ```
+
+Token is persistent in BitWarden.
+
+## Access Dashboard
+
+We assume only the install tutorial has been followed and no additional NodePort has been created.
+
+First we need to expose Kubernetes API to this system.
+
+``` sh
+kubectl proxy
+```
+
+Assuming exposition port `8001` you will find the dashboard login page on this [Link](http://localhost:8001/api/v1/namespaces/kubernetes-dashboard/services/https:kubernetes-dashboard:/proxy/).
+
+## Test NodePort
+
+I use a [test-nginx-deployment.yaml](test-nginx-deployment.yaml) to test a first NodePort exposed by Docker Desktop from Kubernetes.
