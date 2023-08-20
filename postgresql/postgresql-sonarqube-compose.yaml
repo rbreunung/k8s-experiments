@@ -2,7 +2,7 @@
 version: "3.1"
 
 services:
-  db:
+  postgres:
     image: postgres
     restart: always
     environment:
@@ -10,7 +10,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./postgresql/init:/docker-entrypoint-initdb.d:ro
+      - ./init/init-sonarqube-db.sql:/docker-entrypoint-initdb.d/init.sql:ro
       - db-data:/var/lib/postgresql/data
     networks:
       - db-network
@@ -18,9 +18,9 @@ services:
   sonarqube:
     image: sonarqube:9-community
     restart: always
-#    sysctls:
-#      - vm.max_map_count=524288
-#      - fs.file-max=131072
+    #    sysctls:
+    #      - vm.max_map_count=524288
+    #      - fs.file-max=131072
     ulimits:
       nproc: 8192
       nofile:
@@ -28,9 +28,15 @@ services:
         hard: 131072
     stop_grace_period: 3600s
     environment:
-      SONAR_JDBC_URL: jdbc:postgresql://localhost/sonarqube
-      SONAR_JDBC_USERNAME: sonarqube
-      SONAR_JDBC_PASSWORD: sonarqube-password
+      SONAR_JDBC_URL: jdbc:postgresql://postgres/sonarqube
+      #      SONAR_JDBC_USERNAME: sonarqube
+      #      SONAR_JDBC_PASSWORD: sonarqube-password
+      SONAR_JDBC_USERNAME: postgres
+      SONAR_JDBC_PASSWORD: example
+    ports:
+      - 9000:9000
+    networks:
+      - db-network
     volumes:
       - sonarqube-data:/opt/sonarqube/data
       - sonarqube-logs:/opt/sonarqube/logs
