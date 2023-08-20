@@ -5,6 +5,7 @@
         "jdbc",
         "nofile",
         "nproc",
+        "socat",
         "ulimits"
     ],
     "yaml.schemas": {

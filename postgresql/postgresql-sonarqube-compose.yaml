@@ -10,7 +10,7 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - db-init:docker-entrypoint-initdb.d
+      - ./postgresql/init:/docker-entrypoint-initdb.d:ro
       - db-data:/var/lib/postgresql/data
     networks:
       - db-network
@@ -18,9 +18,9 @@ services:
   sonarqube:
     image: sonarqube:9-community
     restart: always
-    sysctls:
-      - vm.max_map_count=524288
-      - fs.file-max=131072
+#    sysctls:
+#      - vm.max_map_count=524288
+#      - fs.file-max=131072
     ulimits:
       nproc: 8192
       nofile:
@@ -33,16 +33,11 @@ services:
       SONAR_JDBC_PASSWORD: sonarqube-password
     volumes:
       - sonarqube-data:/opt/sonarqube/data
-      - sonarqube-logs:opt/sonarqube/logs
+      - sonarqube-logs:/opt/sonarqube/logs
       - sonarqube-extensions:/opt/sonarqube/extensions
 
 volumes:
   db-data:
-  db-init:
-    driver: local
-    driver_opts:
-      o: ro
-      device: ./postgresql/init
   sonarqube-data:
   sonarqube-logs:
   sonarqube-extensions:
