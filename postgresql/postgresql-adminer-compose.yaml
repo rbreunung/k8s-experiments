@@ -1,0 +1,51 @@
+# Use postgres/example user/password credentials
+version: "3.1"
+
+services:
+  db:
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: example
+    ports:
+      - 5432:5432
+    volumes:
+      - db-init:docker-entrypoint-initdb.d
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - db-network
+
+  sonarqube:
+    image: sonarqube:9-community
+    restart: always
+    sysctls:
+      - vm.max_map_count=524288
+      - fs.file-max=131072
+    ulimits:
+      nproc: 8192
+      nofile:
+        soft: 131072
+        hard: 131072
+    stop_grace_period: 3600s
+    environment:
+      SONAR_JDBC_URL: jdbc:postgresql://localhost/sonarqube
+      SONAR_JDBC_USERNAME: sonarqube
+      SONAR_JDBC_PASSWORD: sonarqube-password
+    volumes:
+      - sonarqube-data:/opt/sonarqube/data
+      - sonarqube-logs:opt/sonarqube/logs
+      - sonarqube-extensions:/opt/sonarqube/extensions
+
+volumes:
+  db-data:
+  db-init:
+    driver: local
+    driver_opts:
+      o: ro
+      device: ./postgresql/init
+  sonarqube-data:
+  sonarqube-logs:
+  sonarqube-extensions:
+
+networks:
+  db-network:

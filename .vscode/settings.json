@@ -1,0 +1,13 @@
+{
+    "cSpell.words": [
+        "adminer",
+        "initdb",
+        "jdbc",
+        "nofile",
+        "nproc",
+        "ulimits"
+    ],
+    "yaml.schemas": {
+        "https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json": "file:///Users/antrophos/git/kubernetes-dashboard/postgresql/postgresql-adminer-compose.yaml"
+    }
+}
