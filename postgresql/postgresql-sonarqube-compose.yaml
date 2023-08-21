@@ -18,6 +18,7 @@ services:
   sonarqube:
     image: sonarqube:9-community
     restart: always
+    #    need adaptation in host
     #    sysctls:
     #      - vm.max_map_count=524288
     #      - fs.file-max=131072
